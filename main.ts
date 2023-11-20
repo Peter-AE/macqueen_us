@@ -1,6 +1,5 @@
 // Project Settings:
-// Project Name:
-// Macqueen_US
+// Project Name: Macqueen_US
 // 
 // No Pairing Required: Anyone can connect via Bluetooth.
 // 
@@ -10,12 +9,14 @@
 bluetooth.onBluetoothConnected(function () {
     maqueen.motorStop(maqueen.Motors.All)
     speedValue = speedValue
-    basic.clearScreen()
+    runningState = 1
     basic.showString("C")
 })
 bluetooth.onBluetoothDisconnected(function () {
     maqueen.motorStop(maqueen.Motors.All)
+    runningState = 0
     basic.showString("D")
+   
 })
 control.onEvent(EventBusSource.MES_DPAD_CONTROLLER_ID, EventBusValue.MICROBIT_EVT_ANY, function () {
     if (control.eventValue() == EventBusValue.MES_DPAD_BUTTON_1_DOWN) {
@@ -81,6 +82,7 @@ control.onEvent(EventBusSource.MES_DPAD_CONTROLLER_ID, EventBusValue.MICROBIT_EV
  */
 let distance = 0
 let direction = 0
+let runningState = 0
 let obstacle = 0
 let speedIncrement = 0
 let speedValue = 0
@@ -89,6 +91,7 @@ maxSpeed = 200
 speedValue = 100
 speedIncrement = 25
 obstacle = 0
+runningState = 0
 basic.showLeds(`
     . . . . .
     . . . . #
@@ -106,8 +109,14 @@ basic.forever(function () {
     if (distance > 8) {
         obstacle = 0
     }
+    
     if (direction == 0) {
-        basic.showString("C")
+        if (runningState == 0) {
+            basic.showString("D")
+        }
+        else if (runningState == 1) {
+            basic.showString("C")
+        }
     } else if (direction == 1) {
         if (obstacle == 1) {
             maqueen.motorStop(maqueen.Motors.All)

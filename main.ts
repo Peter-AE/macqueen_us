@@ -1,4 +1,7 @@
 // Project Settings:
+// Project Name:
+// Macqueen_US
+// 
 // No Pairing Required: Anyone can connect via Bluetooth.
 // 
 // Extensions:
@@ -73,6 +76,9 @@ control.onEvent(EventBusSource.MES_DPAD_CONTROLLER_ID, EventBusValue.MICROBIT_EV
     	
     }
 })
+/**
+ * On Start
+ */
 let distance = 0
 let direction = 0
 let obstacle = 0
@@ -91,6 +97,7 @@ basic.showLeds(`
     . # . . .
     `)
 maqueen.motorStop(maqueen.Motors.All)
+// Obstacle Detection and Handling
 basic.forever(function () {
     distance = maqueen.Ultrasonic(PingUnit.Centimeters)
     if (distance < 6) {
@@ -98,7 +105,6 @@ basic.forever(function () {
     }
     if (distance > 8) {
         obstacle = 0
-        basic.clearScreen()
     }
     if (direction == 0) {
         basic.showString("C")
